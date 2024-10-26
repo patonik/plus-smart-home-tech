@@ -20,7 +20,6 @@ public class HubEventController {
 
     @PostMapping("/hubs")
     public void collectHubEvent(@Valid @RequestBody HubEvent event) {
-        // Send the hub event to the Kafka topic for hub data
         kafkaTemplate.send(HUB_TOPIC, event.getHubId(), event);
     }
 }
