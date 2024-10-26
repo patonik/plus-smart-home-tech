@@ -1,4 +1,4 @@
-package ru.yandex.practicum.collector.event;
+package ru.yandex.practicum.collector.event.sensor;
 
 import lombok.Getter;
 import lombok.Setter;
