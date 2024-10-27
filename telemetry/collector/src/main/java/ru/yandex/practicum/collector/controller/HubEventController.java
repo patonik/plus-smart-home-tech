@@ -1,5 +1,6 @@
 package ru.yandex.practicum.collector.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +14,7 @@ public class HubEventController {
 
     private final KafkaTemplate<String, HubEvent> kafkaTemplate;
     private static final String HUB_TOPIC = "telemetry.hubs.v1";
-
+    @Autowired
     public HubEventController(KafkaTemplate<String, HubEvent> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
