@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+package ru.yandex.practicum.grpc;
+
+// Define the main service CollectorController
+service CollectorController {
+  // RPC method for collecting sensor events
+  rpc CollectSensorEvent (SensorEventProto) returns (google.protobuf.Empty);
+
+  // RPC method for collecting hub events
+  rpc CollectHubEvent (HubEventProto) returns (google.protobuf.Empty);
+}
+
+// Enum for device types
+enum DeviceTypeProto {
+  MOTION_SENSOR = 0;      // Motion sensor
+  TEMPERATURE_SENSOR = 1; // Temperature sensor
+  LIGHT_SENSOR = 2;       // Light sensor
+  CLIMATE_SENSOR = 3;     // Climate control sensor
+  SWITCH_SENSOR = 4;      // Switch
+}
+
+// Main message type for Hub events
+message HubEventProto {
+  string hub_id = 1;                                  // Identifier for the hub
+  google.protobuf.Timestamp timestamp = 2;            // Timestamp for the event
+
+  oneof payload {
+    DeviceAddedEventProto device_added = 3;           // Device added event
+    DeviceRemovedEventProto device_removed = 4;       // Device removed event
+    ScenarioAddedEventProto scenario_added = 5;       // Scenario added event
+    ScenarioRemovedEventProto scenario_removed = 6;   // Scenario removed event
+  }
+}
+
+// Message for a device added event
+message DeviceAddedEventProto {
+  string id = 1;                     // Identifier for the added device
+  DeviceTypeProto type = 2;          // Type of the added device
+}
+
+// Message for a device removed event
+message DeviceRemovedEventProto {
+  string id = 1;                     // Identifier for the removed device
+}
+
+// Message for a scenario added event
+message ScenarioAddedEventProto {
+  string id = 1;                     // Identifier for the added scenario
+}
+
+// Message for a scenario removed event
+message ScenarioRemovedEventProto {
+  string id = 1;                     // Identifier for the removed scenario
+}
+
+// Message type for Sensor events
+message SensorEventProto {
+  string id = 1;                     // Identifier for the sensor event
+  google.protobuf.Timestamp timestamp = 2; // Timestamp for the sensor event
+  string hubId = 3;                 // Identifier for the associated hub
+}
