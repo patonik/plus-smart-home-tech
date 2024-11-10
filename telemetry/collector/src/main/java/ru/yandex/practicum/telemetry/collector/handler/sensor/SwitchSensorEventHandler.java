@@ -6,7 +6,6 @@ import ru.yandex.practicum.grpc.telemetry.event.SwitchSensorEvent;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventPayloadAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventTypeAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SwitchSensorEventAvro;
-
 import java.time.Instant;
 
 /**
