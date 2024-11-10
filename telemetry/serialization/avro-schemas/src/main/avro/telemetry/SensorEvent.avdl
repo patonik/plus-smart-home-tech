@@ -1,7 +1,7 @@
 @namespace("ru.yandex.practicum.kafka.telemetry.event")
 protocol SensorEventProtocol {
 
-	enum SensorEventType {
+	enum SensorEventTypeAvro {
 		LIGHT_SENSOR_EVENT,
 		CLIMATE_SENSOR_EVENT,
 		MOTION_SENSOR_EVENT,
@@ -9,72 +9,52 @@ protocol SensorEventProtocol {
 		TEMPERATURE_SENSOR_EVENT
 	}
 
-	record SensorEvent {
+	record SensorEventAvro {
 		string id;
 		string hubId;
 		@logicalType("timestamp-millis")
 		long timestamp;
-		SensorEventType type;
+		SensorEventTypeAvro type;
 	}
 
-	record LightSensorEvent {
-		string id;
-		string hubId;
-		@logicalType("timestamp-millis")
-		long timestamp;
+	record LightSensorEventAvro {
+		SensorEventAvro base;
 		int link_quality;
 		int luminosity;
-		SensorEventType type;
 	}
 
-	record ClimateSensorEvent {
-		string id;
-		string hubId;
-		@logicalType("timestamp-millis")
-		long timestamp;
+	record ClimateSensorEventAvro {
+		SensorEventAvro base;
 		int temperature_c;
 		int humidity;
 		int co2_level;
-		SensorEventType type;
 	}
 
-	record MotionSensorEvent {
-		string id;
-		string hubId;
-		@logicalType("timestamp-millis")
-		long timestamp;
+	record MotionSensorEventAvro {
+		SensorEventAvro base;
 		int link_quality;
 		boolean motion;
 		int voltage;
-		SensorEventType type;
 	}
 
-	record SwitchSensorEvent {
-		string id;
-		string hubId;
-		@logicalType("timestamp-millis")
-		long timestamp;
+	record SwitchSensorEventAvro {
+		SensorEventAvro base;
 		boolean state;
-		SensorEventType type;
 	}
 
-	record TemperatureSensorEvent {
-		string id;
-		string hubId;
-		@logicalType("timestamp-millis")
-		long timestamp;
+	record TemperatureSensorEventAvro {
+		SensorEventAvro base;
 		int temperature_c;
 		int temperature_f;
-		SensorEventType type;
 	}
 
-	record SensorEventPayload {
+	record SensorEventPayloadAvro {
 		union{
-			LightSensorEvent,
-			ClimateSensorEvent,
-			MotionSensorEvent,
-			SwitchSensorEvent,
-			TemperatureSensorEvent
+			LightSensorEventAvro,
+			ClimateSensorEventAvro,
+			MotionSensorEventAvro,
+			SwitchSensorEventAvro,
+			TemperatureSensorEventAvro
 		} payload;
 	}
 }
