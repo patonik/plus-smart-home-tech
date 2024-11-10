@@ -3,7 +3,6 @@ package ru.yandex.practicum.telemetry.collector.handler.sensor;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.SwitchSensorEvent;
-import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventPayloadAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventTypeAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SwitchSensorEventAvro;

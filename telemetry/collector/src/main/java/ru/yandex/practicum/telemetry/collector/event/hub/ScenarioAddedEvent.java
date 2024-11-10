@@ -1,12 +1,11 @@
 package ru.yandex.practicum.telemetry.collector.event.hub;
 
-import java.util.List;
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import ru.yandex.practicum.telemetry.collector.event.hub.enums.HubEventType;
+
+import java.util.List;
 
 @Getter @Setter @ToString(callSuper = true)
 public class ScenarioAddedEvent extends HubEvent {

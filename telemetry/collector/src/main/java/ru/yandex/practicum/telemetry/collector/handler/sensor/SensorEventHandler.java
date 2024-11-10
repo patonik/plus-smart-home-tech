@@ -1,7 +1,6 @@
 package ru.yandex.practicum.telemetry.collector.handler.sensor;
 
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
-import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventPayloadAvro;
 
 /**

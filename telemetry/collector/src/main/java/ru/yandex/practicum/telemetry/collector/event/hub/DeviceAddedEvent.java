@@ -1,6 +1,5 @@
 package ru.yandex.practicum.telemetry.collector.event.hub;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

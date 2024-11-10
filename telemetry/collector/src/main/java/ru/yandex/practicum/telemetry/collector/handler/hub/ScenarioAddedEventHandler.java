@@ -2,7 +2,6 @@ package ru.yandex.practicum.telemetry.collector.handler.hub;
 
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceActionProto;
-import ru.yandex.practicum.grpc.telemetry.event.DeviceRemovedEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.ScenarioAddedEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.ScenarioConditionProto;
@@ -13,9 +12,6 @@ import ru.yandex.practicum.kafka.telemetry.event.DeviceActionAvro;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ScenarioAddedEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ScenarioConditionAvro;
-import ru.yandex.practicum.telemetry.collector.event.hub.HubEvent;
-import ru.yandex.practicum.telemetry.collector.event.hub.ScenarioAddedEvent;
-import ru.yandex.practicum.telemetry.collector.event.hub.ScenarioCondition;
 
 import java.util.ArrayList;
 import java.util.List;
