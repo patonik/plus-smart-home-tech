@@ -18,6 +18,10 @@ protocol HubEventProtocol {
 		ACTIVATE, DEACTIVATE, INVERSE, SET_VALUE
 	}
 
+	enum HubEventType {
+		DEVICE_ADDED, DEVICE_REMOVED, SCENARIO_ADDED, SCENARIO_REMOVED
+	}
+
 	// Records for hub events
 	record DeviceAddedEventAvro {
 		string id;
@@ -26,6 +30,16 @@ protocol HubEventProtocol {
 
 	record DeviceRemovedEventAvro {
 		string id;
+	}
+
+	record ScenarioAddedEventAvro {
+		string name;
+		array<ScenarioConditionAvro> conditions;
+		array<DeviceActionAvro> actions;
+	}
+
+	record ScenarioRemovedEventAvro {
+		string name;
 	}
 
 	record ScenarioConditionAvro {
@@ -41,19 +55,10 @@ protocol HubEventProtocol {
 		int? value = null;
 	}
 
-	record ScenarioAddedEventAvro {
-		string name;
-		array<ScenarioConditionAvro> conditions;
-		array<DeviceActionAvro> actions;
-	}
-
-	record ScenarioRemovedEventAvro {
-		string name;
-	}
-
 	record HubEventAvro {
 		string hub_id;
 		timestamp_ms timestamp;
+		HubEventType eventType;
 		union { DeviceAddedEventAvro, DeviceRemovedEventAvro, ScenarioAddedEventAvro, ScenarioRemovedEventAvro } payload;
 	}
 }
