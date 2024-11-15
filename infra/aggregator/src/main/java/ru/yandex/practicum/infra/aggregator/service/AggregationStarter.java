@@ -56,8 +56,9 @@ public class AggregationStarter {
                 // Commit offsets after processing each batch of records
                 consumer.commitSync();
             }
-        } catch (WakeupException ignored) {
+        } catch (WakeupException e) {
             // Ignored to handle shutdown request
+            log.error("Processing interrupted in Aggregator", e);
         } catch (Exception e) {
             log.error("Error during event processing in Aggregator", e);
         } finally {
