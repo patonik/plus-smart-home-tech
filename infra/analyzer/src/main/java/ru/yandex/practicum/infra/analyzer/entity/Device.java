@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.yandex.practicum.kafka.telemetry.event.DeviceTypeAvro;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "devices")
 @Getter
@@ -30,5 +32,26 @@ public class Device {
     @Column(name = "type", nullable = false)
     private DeviceTypeAvro deviceType;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Device device = (Device) o;
+        return Objects.equals(id, device.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "Device{" +
+            "id='" + id + '\'' +
+            ", hubId='" + hubId + '\'' +
+            ", deviceType=" + deviceType +
+            '}';
+    }
 }
 
