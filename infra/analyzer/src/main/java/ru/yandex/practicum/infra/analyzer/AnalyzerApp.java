@@ -3,6 +3,8 @@ package ru.yandex.practicum.infra.analyzer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ConfigurableApplicationContext;
 import ru.yandex.practicum.infra.analyzer.processing.HubEventProcessor;
 import ru.yandex.practicum.infra.analyzer.processing.SnapshotProcessor;
@@ -11,6 +13,8 @@ import javax.annotation.PreDestroy;
 
 @Slf4j
 @SpringBootApplication
+@ConfigurationPropertiesScan
+@EnableDiscoveryClient
 public class AnalyzerApp {
     private static Thread hubEventThread;
     private static Thread snapshotThread;
