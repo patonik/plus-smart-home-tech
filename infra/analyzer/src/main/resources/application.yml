@@ -1,4 +1,17 @@
 spring:
+  application:
+    name: analyzer
+  config:
+    import: configserver:http://localhost:8888
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        serviceId: config-server
+      fail-fast: true
+      retry:
+        useRandomPolicy: true
+        max-interval: 6000
   kafka:
     bootstrap-servers: localhost:9093
 kafka:
@@ -14,3 +27,16 @@ grpc:
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
+eureka:
+  client:
+    registerWithEureka: true
+    instance:
+      preferIpAddress: true
+      lease-renewal-interval-in-seconds: 30
+      lease-expiration-duration-in-seconds: 90
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname:localhost}:${eureka.instance.port:8761}/eureka/
+    fetch-registry: false
+http:
+  balancer:
+    api: 'discovery:///main-balancer'
