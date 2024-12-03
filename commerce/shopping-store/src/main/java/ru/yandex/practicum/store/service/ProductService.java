@@ -18,15 +18,13 @@ import ru.yandex.practicum.store.repository.ProductRepository;
 import java.util.List;
 import java.util.UUID;
 
-import static ru.yandex.practicum.interaction.mapper.ProductMapper.convertToDto;
-import static ru.yandex.practicum.interaction.mapper.ProductMapper.convertToEntity;
-import static ru.yandex.practicum.interaction.mapper.ProductMapper.updateEntity;
 
 
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ProductMapper productMapper;
 
     public Page<ProductDto> getProducts(ProductCategory category, int page, int size, List<String> sort) {
         // Build the sorting criteria
@@ -41,21 +39,21 @@ public class ProductService {
         PageRequest pageRequest = PageRequest.of(page, size, sortOrder);
 
         Page<Product> productPage = productRepository.findAllByProductCategory(category, pageRequest);
-        return productPage.map(ProductMapper::convertToDto);
+        return productPage.map(productMapper::convertToDto);
     }
 
     public ProductDto createProduct(ProductDto productDto) {
-        Product product = convertToEntity(productDto);
+        Product product = productMapper.convertToEntity(productDto);
         product = productRepository.save(product);
-        return convertToDto(product);
+        return productMapper.convertToDto(product);
     }
 
     public ProductDto updateProduct(ProductDto productDto) {
         Product product = productRepository.findById(productDto.getProductId())
             .orElseThrow(() -> new ProductNotFoundException("Product not found"));
-        updateEntity(productDto, product);
+        productMapper.updateEntity(productDto, product);
         product = productRepository.save(product);
-        return convertToDto(product);
+        return productMapper.convertToDto(product);
     }
 
     public void deleteProduct(UUID productId) {
@@ -80,7 +78,7 @@ public class ProductService {
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new ProductNotFoundException("Product not found"));
 
-        return convertToDto(product);
+        return productMapper.convertToDto(product);
     }
 
     private Sort parseSortString(String sortString) {
