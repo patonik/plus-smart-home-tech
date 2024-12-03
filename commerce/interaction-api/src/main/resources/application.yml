@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: interaction-api
+  config:
+    import: configserver:http://localhost:8888
+server:
+  port: 0
