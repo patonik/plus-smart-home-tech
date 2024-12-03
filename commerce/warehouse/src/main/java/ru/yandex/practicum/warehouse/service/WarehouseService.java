@@ -20,7 +20,6 @@ import ru.yandex.practicum.warehouse.repository.WarehouseRepository;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -29,15 +28,16 @@ public class WarehouseService {
 
     private final WarehouseRepository warehouseRepository;
     private final AddressRepository addressRepository;
+    private final AddressMapper addressMapper;
+    private final WarehouseProductMapper warehouseProductMapper;
 
     @Transactional
     public void addNewProduct(NewProductInWarehouseRequest request) {
         UUID productId = request.getProductId();
-        Optional<WarehouseProduct> existingProduct = warehouseRepository.findById(productId);
-        if (existingProduct.isPresent()) {
+        if (warehouseRepository.existsById(productId)) {
             throw new SpecifiedProductAlreadyInWarehouseException(productId);
         }
-        warehouseRepository.save(WarehouseProductMapper.convertToEntity(request));
+        warehouseRepository.save(warehouseProductMapper.convertToEntity(request));
     }
 
     @Transactional
@@ -84,7 +84,7 @@ public class WarehouseService {
 
     @Transactional(readOnly = true)
     public AddressDto getWarehouseAddress() {
-        return AddressMapper.convertToDto(addressRepository.findAll().getFirst());
+        return addressMapper.convertToDto(addressRepository.findAll().getFirst());
     }
 }
 

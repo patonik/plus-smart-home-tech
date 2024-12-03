@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import static ru.yandex.practicum.interaction.mapper.CartMapper.convertToDto;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -26,6 +25,7 @@ public class ShoppingCartService {
 
     private final ShoppingCartRepository shoppingCartRepository;
     private final WarehouseClient warehouseClient;
+    private final CartMapper cartMapper;
 
     public ShoppingCartDto getShoppingCart(String userId) {
         if (userId == null) {
@@ -33,7 +33,7 @@ public class ShoppingCartService {
         }
         ShoppingCart cart = shoppingCartRepository.findByUserId(userId)
             .orElse(shoppingCartRepository.save(new ShoppingCart(userId)));
-        return convertToDto(cart);
+        return cartMapper.convertToDto(cart);
     }
 
     public ShoppingCartDto addProducts(String userId, Map<UUID, Integer> products) {
@@ -46,7 +46,7 @@ public class ShoppingCartService {
             cart.addOrUpdateProduct(uuid, products.get(uuid));
         }
         shoppingCartRepository.save(cart);
-        return convertToDto(cart);
+        return cartMapper.convertToDto(cart);
     }
 
     public void deleteShoppingCart(String userId) {
@@ -87,7 +87,7 @@ public class ShoppingCartService {
         }
         cart.addOrUpdateProduct(productId, changeProductQuantityRequest.getQuantity());
         shoppingCartRepository.save(cart);
-        return convertToDto(cart);
+        return cartMapper.convertToDto(cart);
     }
 
     public BookedProductsDto bookProducts(String userId) {
@@ -98,7 +98,8 @@ public class ShoppingCartService {
             .orElseThrow(() -> new RuntimeException("Shopping cart not found for ID: " + userId));
         BookedProductsDto bookedProducts;
         try {
-            bookedProducts = warehouseClient.checkProductQuantityEnoughForShoppingCart(CartMapper.convertToDto(cart)).getBody();
+            bookedProducts =
+                warehouseClient.checkProductQuantityEnoughForShoppingCart(cartMapper.convertToDto(cart)).getBody();
         } catch (FeignException.NotFound e) {
             throw new RuntimeException("Product availability check failed: " + e.getMessage());
         }
