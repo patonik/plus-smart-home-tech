@@ -15,6 +15,7 @@ import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -52,6 +53,27 @@ public class ShoppingCart {
 
     public void removeProduct(UUID productId) {
         products.remove(productId);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShoppingCart cart = (ShoppingCart) o;
+        return Objects.equals(shoppingCartId, cart.shoppingCartId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(shoppingCartId);
+    }
+
+    @Override
+    public String toString() {
+        return "ShoppingCart{" +
+            "shoppingCartId=" + shoppingCartId +
+            ", userId='" + userId + '\'' +
+            '}';
     }
 }
 

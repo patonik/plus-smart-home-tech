@@ -4,29 +4,35 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.yandex.practicum.interaction.domain.OrderBooking;
 import ru.yandex.practicum.interaction.domain.WarehouseProduct;
 import ru.yandex.practicum.interaction.dto.cart.BookedProductsDto;
 import ru.yandex.practicum.interaction.dto.cart.ShoppingCartDto;
 import ru.yandex.practicum.interaction.dto.warehouse.AddProductToWarehouseRequest;
 import ru.yandex.practicum.interaction.dto.warehouse.AddressDto;
+import ru.yandex.practicum.interaction.dto.warehouse.AssemblyProductsForOrderRequest;
 import ru.yandex.practicum.interaction.dto.warehouse.NewProductInWarehouseRequest;
+import ru.yandex.practicum.interaction.dto.warehouse.ShippedToDeliveryRequest;
+import ru.yandex.practicum.interaction.exception.NoSpecifiedProductInWarehouseException;
+import ru.yandex.practicum.interaction.exception.ProductInShoppingCartLowQuantityInWarehouse;
+import ru.yandex.practicum.interaction.exception.SpecifiedProductAlreadyInWarehouseException;
 import ru.yandex.practicum.interaction.mapper.AddressMapper;
 import ru.yandex.practicum.interaction.mapper.WarehouseProductMapper;
-import ru.yandex.practicum.warehouse.exception.NoSpecifiedProductInWarehouseException;
-import ru.yandex.practicum.warehouse.exception.ProductInShoppingCartLowQuantityInWarehouse;
-import ru.yandex.practicum.warehouse.exception.SpecifiedProductAlreadyInWarehouseException;
 import ru.yandex.practicum.warehouse.repository.AddressRepository;
+import ru.yandex.practicum.warehouse.repository.BookingRepository;
 import ru.yandex.practicum.warehouse.repository.WarehouseRepository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WarehouseService {
 
     private final WarehouseRepository warehouseRepository;
+    private final BookingRepository bookingRepository;
     private final AddressRepository addressRepository;
     private final AddressMapper addressMapper;
     private final WarehouseProductMapper warehouseProductMapper;
@@ -85,6 +91,49 @@ public class WarehouseService {
     @Transactional(readOnly = true)
     public AddressDto getWarehouseAddress() {
         return addressMapper.convertToDto(addressRepository.findAll().getFirst());
+    }
+
+    @Transactional
+    public void shippedToDelivery(ShippedToDeliveryRequest request) {
+        OrderBooking orderBooking = bookingRepository.findByOrderId(request.getOrderId()).orElseThrow(
+            () -> new RuntimeException("Nothing booked for the order")
+        );
+        orderBooking.setDeliveryId(request.getDeliveryId());
+        bookingRepository.save(orderBooking);
+    }
+
+    @Transactional
+    public void assembleProducts(AssemblyProductsForOrderRequest request) {
+        Map<UUID, Integer> products = request.getProducts();
+        List<WarehouseProduct> warehouseProducts =
+            warehouseRepository.findAllWhereProductIdIn(products.keySet().stream().toList());
+        if (warehouseProducts.size() != products.size()) {
+            warehouseProducts.stream().map(WarehouseProduct::getProductId).forEach(products.keySet()::remove);
+            throw new NoSpecifiedProductInWarehouseException(products.keySet().stream().findFirst().orElseThrow(() ->
+                new RuntimeException("Logical error in data retrieval")));
+        }
+        Map<UUID, Integer> availableProducts = warehouseProducts.stream()
+            .collect(Collectors.toMap(WarehouseProduct::getProductId,
+                w -> Math.min(w.getQuantity(), products.get(w.getProductId()))));
+        OrderBooking entity = new OrderBooking();
+        entity.setOrderId(request.getOrderId());
+        entity.setProducts(availableProducts);
+        bookingRepository.save(entity);
+    }
+
+    @Transactional
+    public void returnProducts(Map<UUID, Integer> products) {
+        List<WarehouseProduct> warehouseProducts =
+            warehouseRepository.findAllWhereProductIdIn(products.keySet().stream().toList());
+        if (warehouseProducts.size() != products.size()) {
+            warehouseProducts.stream().map(WarehouseProduct::getProductId).forEach(products.keySet()::remove);
+            throw new NoSpecifiedProductInWarehouseException(products.keySet().stream().findFirst().orElseThrow(() ->
+                new RuntimeException("Logical error in data retrieval")));
+        }
+        for (WarehouseProduct product : warehouseProducts) {
+            product.setQuantity(product.getQuantity() + products.get(product.getProductId()));
+        }
+        warehouseRepository.saveAll(warehouseProducts);
     }
 }
 

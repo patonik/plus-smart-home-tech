@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.yandex.practicum.interaction.exception.ValidationException;
-import ru.yandex.practicum.warehouse.exception.NoSpecifiedProductInWarehouseException;
-import ru.yandex.practicum.warehouse.exception.ProductInShoppingCartLowQuantityInWarehouse;
-import ru.yandex.practicum.warehouse.exception.SpecifiedProductAlreadyInWarehouseException;
+import ru.yandex.practicum.interaction.exception.NoSpecifiedProductInWarehouseException;
+import ru.yandex.practicum.interaction.exception.ProductInShoppingCartLowQuantityInWarehouse;
+import ru.yandex.practicum.interaction.exception.SpecifiedProductAlreadyInWarehouseException;
 
 @RestControllerAdvice
 public class ControllerAdvice {
