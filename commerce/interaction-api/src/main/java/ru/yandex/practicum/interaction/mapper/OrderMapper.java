@@ -13,8 +13,8 @@ import java.util.List;
 public interface OrderMapper extends AddressMapper{
 
     OrderDto convertToDto(Order entity);
-    @Mapping(target = "userName", source = "userName")
-    Order convertToEntity(OrderDto dto, String userName);
+    @Mapping(target = "userId", source = "userId")
+    Order convertToEntity(OrderDto dto, String userId);
 
     List<OrderDto> toDtoList(List<Order> orders);
     @Mapping(target = "shoppingCartId", source = "shoppingCart.shoppingCartId")
