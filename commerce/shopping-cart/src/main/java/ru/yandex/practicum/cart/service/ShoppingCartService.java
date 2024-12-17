@@ -4,8 +4,8 @@ import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.cart.exception.NoProductsInShoppingCartException;
-import ru.yandex.practicum.cart.exception.NotAuthorizedUserException;
+import ru.yandex.practicum.interaction.exception.NoProductsInShoppingCartException;
+import ru.yandex.practicum.interaction.exception.NotAuthorizedUserException;
 import ru.yandex.practicum.cart.repository.ShoppingCartRepository;
 import ru.yandex.practicum.interaction.client.WarehouseClient;
 import ru.yandex.practicum.interaction.domain.ShoppingCart;
@@ -100,7 +100,7 @@ public class ShoppingCartService {
         try {
             bookedProducts =
                 warehouseClient.checkProductQuantityEnoughForShoppingCart(cartMapper.convertToDto(cart)).getBody();
-        } catch (FeignException.NotFound e) {
+        } catch (FeignException.BadRequest e) {
             throw new RuntimeException("Product availability check failed: " + e.getMessage());
         }
         return bookedProducts;

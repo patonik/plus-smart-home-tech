@@ -5,8 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.yandex.practicum.cart.exception.NoProductsInShoppingCartException;
-import ru.yandex.practicum.cart.exception.NotAuthorizedUserException;
+import ru.yandex.practicum.interaction.exception.NoProductsInShoppingCartException;
+import ru.yandex.practicum.interaction.exception.NotAuthorizedUserException;
 import ru.yandex.practicum.interaction.exception.ValidationException;
 
 @RestControllerAdvice

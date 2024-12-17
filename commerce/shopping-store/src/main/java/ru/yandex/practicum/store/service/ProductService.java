@@ -12,7 +12,7 @@ import ru.yandex.practicum.interaction.dto.product.SetProductQuantityStateReques
 import ru.yandex.practicum.interaction.enums.ProductCategory;
 import ru.yandex.practicum.interaction.enums.QuantityState;
 import ru.yandex.practicum.interaction.mapper.ProductMapper;
-import ru.yandex.practicum.store.exception.ProductNotFoundException;
+import ru.yandex.practicum.interaction.exception.ProductNotFoundException;
 import ru.yandex.practicum.store.repository.ProductRepository;
 
 import java.util.List;
